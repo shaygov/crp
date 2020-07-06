@@ -7,10 +7,49 @@ const fs = require('fs');
 function download(content, fileName, contentType) {
     let dt = new Date();
     let dtti = dt.getTime();
-	fs.writeFile('src/base_'+dtti+'.json', content,  (err) => {
+	fs.writeFile('client/src/properties/base_'+dtti+'.json', content,  (err) => {
 	    if (err) throw err;
-	    console.log('Data written to file');
-	   StyleDictionary.buildAllPlatforms();
+        console.log('Data written to file');
+        
+        require("style-dictionary").extend({
+            source: ["client/src/properties/**/*.json"],
+            platforms: {
+                scss: {
+                    transformGroup: "scss",
+                    buildPath: "client/src/web/",
+                    files: [
+                        {
+                            destination: "_colors.scss",
+                            format: "scss/variables",
+                            filter: {
+                                type: "color"
+                            }
+                        },
+                        {
+                            destination: "_typography.scss",
+                            format: "scss/variables",
+                            filter: {
+                                type: "typography"
+                            }
+                        },
+                        {
+                            destination: "_grids.scss",
+                            format: "scss/variables",
+                            filter: {
+                                type: "grids"
+                            }
+                        },
+                        {
+                            destination: "_spacers.scss",
+                            format: "scss/variables",
+                            filter: {
+                                type: "spacers"
+                            }
+                        }
+                    ]
+                }
+            }
+        }).buildAllPlatforms();
 	});
 }
 ////////////////////////////////////////////////
@@ -225,50 +264,6 @@ async function getStylesArtboard(figmaApiKey, figmaId) {
         "application/json"
     );
 }
-
-
-
-
-
-const StyleDictionary = require("style-dictionary").extend({
-    source: ["src/**/*.json"],
-    platforms: {
-        scss: {
-            transformGroup: "scss",
-            buildPath: "src/web/",
-            files: [
-                {
-                    destination: "_colors.scss",
-                    format: "scss/variables",
-                    filter: {
-                        type: "color"
-                    }
-                },
-                {
-                    destination: "_typography.scss",
-                    format: "scss/variables",
-                    filter: {
-                        type: "typography"
-                    }
-                },
-                {
-                    destination: "_grids.scss",
-                    format: "scss/variables",
-                    filter: {
-                        type: "grids"
-                    }
-                },
-                {
-                    destination: "_spacers.scss",
-                    format: "scss/variables",
-                    filter: {
-                        type: "spacers"
-                    }
-                }
-            ]
-        }
-    }
-});
 
 
  getStylesArtboard(
