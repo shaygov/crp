@@ -5,7 +5,9 @@ const fs = require('fs');
 // const loaderDiv = document.querySelector(".btn-loading");
 
 function download(content, fileName, contentType) {
-	fs.writeFile('src/base.json', content,  (err) => {
+    let dt = new Date();
+    let dtti = dt.getTime();
+	fs.writeFile('src/base_'+dtti+'.json', content,  (err) => {
 	    if (err) throw err;
 	    console.log('Data written to file');
 	   StyleDictionary.buildAllPlatforms();
