@@ -4,13 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "client-install": "npm install --prefix client",
-    "start": "node index.js",
-    "server": "nodemon index.js",
-    "client": "npm start --prefix client",
+    "client-install": "npm install --prefix client", 
+    "start": "npm run dev", 
+    "server": "nodemon server.js", 
+    "client": "npm start --prefix client", 
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client  && npm run build --prefix client",
-    "magic": "node ./magic.js"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"  
   },
   "repository": {
     "type": "git",
@@ -25,8 +24,6 @@
   "dependencies": {
     "concurrently": "^5.2.0",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.0",
-    "nodemon": "^2.0.4",
-    "style-dictionary": "^2.10.0"
+    "nodemon": "^2.0.4"
   }
 }
