@@ -1,21 +1,44 @@
 const express = require('express');
-const app = express();
 const path = require('path');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const app = express();
 const port = process.env.PORT || 5000;
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-//Static file declaration
-// app.use(express.static(path.join(__dirname, 'client/build')));
+// API calls
+app.get('/api/hello', (req, res) => {
+  res.send({ express: 'Hello From Express' });
+});
 
-//production mode
-// if(process.env.NODE_ENV === 'production') {  
-//     app.use(express.static(path.join(__dirname, 'client/build')));  
-//     //  app.get('*', (req, res) => {    res.sendfile(path.join(__dirname = 'client/build/index.html'));  })
-// }
-//build mode
-app.get('*', (req, res) => {  
-    res.sendFile(path.join(__dirname+'/client/public/index.html'));
-})
+app.post('/api/world', (req, res) => {
+  console.log(req.body);
+  let dt = new Date();
+  let dttime = dt.getTime();
 
-//start server
- app.listen(port, (req, res) => {  console.log( `server listening on port: ${port}`);});
+  res.send(
+    `received your POST request. This is what you sent me: ${req.body.post}`,
+  );
+
+  let content = JSON.stringify({test: 1234}, null, 4);
+
+  fs.writeFile('./client/src/base_'+dttime+'.json', content,  (err) => {
+      if (err) throw err;
+
+  });
+
+});
+
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, 'client/build')));
+
+  // Handle React routing, return all requests to React app
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
